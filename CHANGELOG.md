@@ -12,3 +12,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Native OpenAPI generation via `Microsoft.AspNetCore.OpenApi` (10.0.12).
 - Interactive API documentation using `Scalar.AspNetCore`.
 - Docker Compose configuration with local PostgreSQL 16 container and healthcheck.
+- `Transaction` domain entity, `TransactionType`, and `TransactionCategory` enums with unit tests in `Coin.Domain`.
