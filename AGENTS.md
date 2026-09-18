@@ -5,3 +5,5 @@
 - **Security & Secrets**: Never commit real production connection strings, passwords, or secrets. Local development credentials pointing to disposable local Docker containers (e.g. `postgres:postgres` in `appsettings.Development.json`) are permitted for developer portability across multiple machines.
 - **Language**: All code, commit messages, PR descriptions, issue titles, user stories, and documentation must be written in English.
 - **Style**: Clean text only (no emojis in cards or commit messages).
+- **Pull Request Titles**: Write PR titles as clean imperative sentences in English (e.g. `Model transaction entity and enums` or `[Domain] Model transaction entity and enums`). Do not use Conventional Commits prefixes (such as `feat:` or `fix:`) in PR titles.
+
