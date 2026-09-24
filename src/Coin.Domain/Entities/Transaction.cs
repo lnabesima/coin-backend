@@ -12,6 +12,8 @@ public class Transaction
     public TransactionType Type { get; private set; }
     public TransactionCategory Category { get; private set; }
     public DateTime CreatedAt { get; private set; }
+    public bool IsDeleted { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
 
     public decimal SignedAmount => Type == TransactionType.Income ? Amount : -Amount;
 
@@ -75,5 +77,17 @@ public class Transaction
         Date = date.Kind == DateTimeKind.Unspecified ? DateTime.SpecifyKind(date, DateTimeKind.Utc) : date.ToUniversalTime();
         Type = type;
         Category = category;
+    }
+
+    public void Delete()
+    {
+        IsDeleted = true;
+        DeletedAt = DateTime.UtcNow;
+    }
+
+    public void Restore()
+    {
+        IsDeleted = false;
+        DeletedAt = null;
     }
 }
