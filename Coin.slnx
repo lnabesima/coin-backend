@@ -6,9 +6,11 @@
     <Project Path="src/Coin.Infrastructure/Coin.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Coin.API.UnitTests/Coin.API.UnitTests.csproj" />
     <Project Path="tests/Coin.Application.UnitTests/Coin.Application.UnitTests.csproj" />
     <Project Path="tests/Coin.Domain.UnitTests/Coin.Domain.UnitTests.csproj" />
     <Project Path="tests/Coin.Infrastructure.UnitTests/Coin.Infrastructure.UnitTests.csproj" />
     <Project Path="tests/Coin.IntegrationTests/Coin.IntegrationTests.csproj" />
   </Folder>
 </Solution>
+
