@@ -15,3 +15,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Transaction` domain entity, `TransactionType`, and `TransactionCategory` enums with unit tests in `Coin.Domain`.
 - Entity Framework Core setup with PostgreSQL provider (`Npgsql`), `CoinDbContext`, `Transaction` entity configuration, and initial database migration (`InitialCreate`).
 - Application layer contracts (`CreateTransactionDto`, `UpdateTransactionDto`, `TransactionResponseDto`), `ITransactionRepository`, `ITransactionService`, `TransactionService` implementation with user isolation, and unit tests in `Coin.Application.UnitTests`.
+- Concrete `TransactionRepository` implementation with EF Core in `Coin.Infrastructure` with strict `UserId` tenant isolation and comprehensive unit tests in `Coin.Infrastructure.UnitTests`.
+- Soft-delete support for transactions (`IsDeleted`, `DeletedAt`, EF Core Global Query Filter, and `AddSoftDeleteToTransactions` database migration).

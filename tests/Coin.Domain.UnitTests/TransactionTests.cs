@@ -266,4 +266,51 @@ public class TransactionTests
 
         Assert.Equal("amount", exception.ParamName);
     }
+
+    [Fact]
+    public void Delete_ShouldSetIsDeletedToTrueAndSetDeletedAt()
+    {
+        // Arrange
+        var transaction = new Transaction(
+            Guid.NewGuid(),
+            "Coffee",
+            10m,
+            DateTime.UtcNow,
+            TransactionType.Expense,
+            TransactionCategory.Food);
+
+        var beforeDelete = DateTime.UtcNow;
+
+        // Act
+        transaction.Delete();
+
+        // Assert
+        Assert.True(transaction.IsDeleted);
+        Assert.NotNull(transaction.DeletedAt);
+        Assert.True(transaction.DeletedAt >= beforeDelete);
+        Assert.True(transaction.DeletedAt <= DateTime.UtcNow);
+    }
+
+    [Fact]
+    public void Restore_ShouldSetIsDeletedToFalseAndClearDeletedAt()
+    {
+        // Arrange
+        var transaction = new Transaction(
+            Guid.NewGuid(),
+            "Coffee",
+            10m,
+            DateTime.UtcNow,
+            TransactionType.Expense,
+            TransactionCategory.Food);
+
+        transaction.Delete();
+        Assert.True(transaction.IsDeleted);
+
+        // Act
+        transaction.Restore();
+
+        // Assert
+        Assert.False(transaction.IsDeleted);
+        Assert.Null(transaction.DeletedAt);
+    }
 }

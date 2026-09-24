@@ -35,7 +35,15 @@ public class TransactionConfiguration : IEntityTypeConfiguration<Transaction>
         builder.Property(t => t.CreatedAt)
             .IsRequired();
 
+        builder.Property(t => t.IsDeleted)
+            .IsRequired()
+            .HasDefaultValue(false);
+
+        builder.Property(t => t.DeletedAt);
+
         builder.Ignore(t => t.SignedAmount);
+
+        builder.HasQueryFilter(t => !t.IsDeleted);
 
         builder.HasIndex(t => new { t.UserId, t.Date })
             .HasDatabaseName("IX_Transactions_UserId_Date");

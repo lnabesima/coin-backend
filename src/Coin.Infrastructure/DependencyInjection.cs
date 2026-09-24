@@ -1,6 +1,8 @@
 namespace Coin.Infrastructure;
 
+using Coin.Application.Interfaces;
 using Coin.Infrastructure.Persistence;
+using Coin.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,8 @@ public static class DependencyInjection
 
         services.AddDbContext<CoinDbContext>(options =>
             options.UseNpgsql(connectionString));
+
+        services.AddScoped<ITransactionRepository, TransactionRepository>();
 
         return services;
     }

@@ -69,3 +69,18 @@ The system SHALL provide an application service to orchestrate transaction opera
 - **WHEN** a deletion is requested for a transaction identifier and the authenticated user identifier
 - **THEN** the transaction is removed from persistence if it exists and belongs to the user, or a not-found result is returned if it does not exist or belongs to another user
 
+### Requirement: Relational transaction repository operations
+The system SHALL provide a concrete relational repository implementation backed by Entity Framework Core that persists and queries transactions with mandatory user isolation.
+
+#### Scenario: Strict user filtering on queries
+- **WHEN** transactions are queried by identifier or list via the repository
+- **THEN** only transactions matching the provided authenticated user identifier are returned, guaranteeing multi-tenant data isolation
+
+#### Scenario: Transaction persistence via repository commands
+- **WHEN** AddAsync, UpdateAsync, or DeleteAsync is executed on the repository
+- **THEN** the corresponding database changes are committed to PostgreSQL via SaveChangesAsync
+
+#### Scenario: Soft deletion of transactions
+- **WHEN** DeleteAsync is executed on the repository for a transaction
+- **THEN** the transaction is marked as deleted with a deletion timestamp and excluded from standard queries via global query filters
+

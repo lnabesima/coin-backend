@@ -3,6 +3,7 @@ using System;
 using Coin.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Coin.Infrastructure.Migrations
 {
     [DbContext(typeof(CoinDbContext))]
-    partial class CoinDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260921215539_AddSoftDeleteToTransactions")]
+    partial class AddSoftDeleteToTransactions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
