@@ -28,11 +28,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
         }
         catch (Exception ex) when (ex is ArgumentException or ArgumentOutOfRangeException)
         {
-            return Problem(
-                statusCode: StatusCodes.Status400BadRequest,
-                title: "Bad Request",
-                detail: ex.Message,
-                type: "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1");
+            return this.BadRequestProblem(ex.Message);
         }
     }
 
@@ -66,11 +62,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
 
         if (result is null)
         {
-            return Problem(
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Not Found",
-                detail: $"Transaction with ID '{id}' was not found.",
-                type: "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4");
+            return this.NotFoundProblem($"Transaction with ID '{id}' was not found.");
         }
 
         return Ok(result);
@@ -97,22 +89,14 @@ public class TransactionsController(ITransactionService transactionService) : Co
 
             if (result is null)
             {
-                return Problem(
-                    statusCode: StatusCodes.Status404NotFound,
-                    title: "Not Found",
-                    detail: $"Transaction with ID '{id}' was not found.",
-                    type: "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4");
+                return this.NotFoundProblem($"Transaction with ID '{id}' was not found.");
             }
 
             return NoContent();
         }
         catch (Exception ex) when (ex is ArgumentException or ArgumentOutOfRangeException)
         {
-            return Problem(
-                statusCode: StatusCodes.Status400BadRequest,
-                title: "Bad Request",
-                detail: ex.Message,
-                type: "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.1");
+            return this.BadRequestProblem(ex.Message);
         }
     }
 
@@ -128,11 +112,7 @@ public class TransactionsController(ITransactionService transactionService) : Co
 
         if (!deleted)
         {
-            return Problem(
-                statusCode: StatusCodes.Status404NotFound,
-                title: "Not Found",
-                detail: $"Transaction with ID '{id}' was not found.",
-                type: "https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4");
+            return this.NotFoundProblem($"Transaction with ID '{id}' was not found.");
         }
 
         return NoContent();
