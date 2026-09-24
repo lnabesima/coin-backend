@@ -19,3 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Soft-delete support for transactions (`IsDeleted`, `DeletedAt`, EF Core Global Query Filter, and `AddSoftDeleteToTransactions` database migration).
 - API Key authentication middleware (`ApiKeyMiddleware`) validating `X-Api-Key` headers via constant-time comparison, attaching `UserId` to `HttpContext.Items`, returning RFC 7807 `ProblemDetails` on 401 Unauthorized, and bypassing exploratory documentation routes in development.
 - `Coin.API.UnitTests` test project with unit tests covering `ApiKeyMiddleware` validation, route bypass, and `HttpContextExtensions`.
+- RESTful `TransactionsController` exposing 5 CRUD endpoints under `/api/v1/transactions` (`POST`, `GET`, `GET {id}`, `PUT {id}`, `DELETE {id}`) with strict tenant isolation, date range filtering, and native RFC 7807 `ProblemDetails` error responses.
+- OpenAPI security scheme configuration for `X-Api-Key` enabling interactive authorized testing in Scalar UI (`/scalar/v1`).
+- Controller unit test suite in `tests/Coin.API.UnitTests/Controllers/TransactionsControllerTests.cs` bringing total test suite to 67 unit tests.
+
