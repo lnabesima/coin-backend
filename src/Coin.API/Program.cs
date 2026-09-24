@@ -1,4 +1,5 @@
 using Coin.API.Configuration;
+using Coin.API.Extensions;
 using Coin.API.Middleware;
 using Coin.Application;
 using Coin.Infrastructure;
@@ -9,6 +10,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
+
+builder.Services.AddControllers();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
+builder.Services.AddProblemDetails();
 
 builder.Services.AddOptions<ApiKeyAuthenticationOptions>()
     .Bind(builder.Configuration.GetSection(ApiKeyAuthenticationOptions.SectionName))
@@ -22,7 +27,8 @@ builder.Services.AddOptions<ApiKeyAuthenticationOptions>()
     .ValidateOnStart();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApiDocumentation();
+
 
 
 var app = builder.Build();
@@ -37,6 +43,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseApiKeyAuthentication();
+
+app.MapControllers();
 
 
 await app.StartAsync();
