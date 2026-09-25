@@ -25,4 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - End-to-end integration test suite using `WebApplicationFactory<Program>` and `Testcontainers.PostgreSql` in `tests/Coin.IntegrationTests/Controllers/TransactionsControllerIntegrationTests.cs`, testing the complete transaction CRUD lifecycle, API Key authentication, and RFC 7807 ProblemDetails error handling against an isolated PostgreSQL instance.
 - Cross-platform task runner configuration via `Taskfile.yml` with tasks for building (`task build`), running API (`task run`), running unit tests (`task test:unit`), running E2E integration tests (`task test:e2e`), and executing the full test suite (`task test`).
 - Comprehensive `README.md` documentation covering prerequisites (.NET 10, Docker, Scoop/WinGet/Task), local startup, test execution guide, and architecture overview.
+- PostgreSQL connection resilience via Npgsql's native `EnableRetryOnFailure` (up to 3 retries with 5s exponential backoff) in `Coin.Infrastructure` to handle transient network disruptions and serverless database cold starts.
+- Database management tasks in `Taskfile.yml` (`task db:migrate` and `task db:status`) supporting local execution and cloud connection string overrides via `CONNECTION_STRING`.
+- Cloud-agnostic database configuration and migration guide in `README.md` covering TLS/SSL requirements, pooled vs direct connection strings, and resilience architecture.
 
