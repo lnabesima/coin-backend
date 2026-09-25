@@ -7,3 +7,7 @@
 - **Style**: Clean text only (no emojis in cards or commit messages).
 - **Pull Request Titles**: Write PR titles as clean imperative sentences in English (e.g. `Model transaction entity and enums` or `[Domain] Model transaction entity and enums`). Do not use Conventional Commits prefixes (such as `feat:` or `fix:`) in PR titles.
 
+## Cloud & Infrastructure
+- **Database**: Neon PostgreSQL. Note: `aws-sa-east-1` (São Paulo) is supported on the free tier and must be selected at project creation time.
+- **Compute / Hosting**: Microsoft Azure Container Apps (ACA) in `brazilsouth` to maintain low latency with São Paulo Neon instance.
+

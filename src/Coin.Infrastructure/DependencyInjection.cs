@@ -14,7 +14,11 @@ public static class DependencyInjection
         string? connectionString = configuration.GetConnectionString("DefaultConnection");
 
         services.AddDbContext<CoinDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseNpgsql(connectionString, npgsqlOptions =>
+                npgsqlOptions.EnableRetryOnFailure(
+                    maxRetryCount: 3,
+                    maxRetryDelay: TimeSpan.FromSeconds(5),
+                    errorCodesToAdd: null)));
 
         services.AddScoped<ITransactionRepository, TransactionRepository>();
 

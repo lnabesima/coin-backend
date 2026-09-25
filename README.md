@@ -69,11 +69,66 @@ task
 
 | Command | Description |
 |---|---|
+| `task db:migrate` | Applies pending EF Core migrations locally or to a cloud DB via `CONNECTION_STRING="..."` |
+| `task db:status` | Lists applied and pending EF Core database migrations |
 | `task test:unit` | Runs all unit tests (Domain, Application, Infrastructure, API) in seconds without requiring Docker |
 | `task test:e2e` | Runs end-to-end integration tests against an isolated containerized PostgreSQL database using Testcontainers |
 | `task test` | Runs the full test suite (unit tests followed by E2E tests) |
 | `task build` | Compiles all projects in the solution |
 | `task run` | Runs the ASP.NET Core API project |
+
+## Database Configuration & Migrations
+
+### Local Database
+For local development, start the PostgreSQL container:
+
+```bash
+docker compose up -d
+```
+
+Connection details default to:
+`Host=localhost;Port=5432;Database=coin_db;Username=postgres;Password=postgres`
+
+### Cloud Database (Managed PostgreSQL)
+The backend is cloud-agnostic and compatible with any standard PostgreSQL 16+ provider (such as Neon, Supabase, Azure Database for PostgreSQL, AWS RDS, or self-hosted instances) over TLS/SSL.
+
+#### Connection String Configurations
+When deploying to cloud environments that utilize external connection poolers (e.g., PgBouncer, Supavisor, or AWS RDS Proxy):
+
+1. **Pooled Connection String:**
+   - Injected into the container runtime (e.g. Azure Container Apps Secrets or environment variables) as `ConnectionStrings__DefaultConnection`.
+   - Uses transaction pooling to support high concurrency with minimal memory overhead:
+     ```
+     Host=<pooler-host>;Port=5432;Database=<database>;Username=<user>;Password=<password>;SslMode=Require;Trust Server Certificate=true;
+     ```
+2. **Direct Connection String:**
+   - Provided to deployment automation (CI/CD pipelines) or developer CLI tools via secrets.
+   - Dedicated connection to the PostgreSQL engine required for executing EF Core DDL migrations and acquiring migration locks:
+     ```
+     Host=<direct-host>;Port=5432;Database=<database>;Username=<user>;Password=<password>;SslMode=Require;Trust Server Certificate=true;
+     ```
+*(Note: If your provider does not use a separate transaction pooler, both runtime and migrations can use the same direct connection string).*
+
+#### Connection Resilience
+`Coin.Infrastructure` configures Npgsql's native retrying execution strategy (`EnableRetryOnFailure`) with up to 3 automatic retries and 5-second exponential backoff. This absorbs transient cloud network latency, failovers, and serverless scale-to-zero wake-up delays without failing HTTP requests.
+
+#### Running Migrations
+To apply migrations against your target database:
+
+- **Local database:**
+  ```bash
+  task db:migrate
+  ```
+
+- **Cloud database (any PostgreSQL provider):**
+  ```bash
+  task db:migrate CONNECTION_STRING="Host=<host>;Port=5432;Database=<database>;Username=<user>;Password=<password>;SslMode=Require;Trust Server Certificate=true;"
+  ```
+
+- **Check migration status:**
+  ```bash
+  task db:status
+  ```
 
 ### Running Tests with the .NET CLI Directly
 

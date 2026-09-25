@@ -35,3 +35,13 @@ tasks:
     cmds:
       - task: test:unit
       - task: test:e2e
+
+  db:migrate:
+    desc: Apply pending EF Core database migrations (optionally override via CONNECTION_STRING="...")
+    cmds:
+      - cmd: dotnet ef database update --project src/Coin.Infrastructure --startup-project src/Coin.API {{if .CONNECTION_STRING}}--connection "{{.CONNECTION_STRING}}"{{end}}
+
+  db:status:
+    desc: Check EF Core migration status (applied and pending migrations)
+    cmds:
+      - cmd: dotnet ef migrations list --project src/Coin.Infrastructure --startup-project src/Coin.API {{if .CONNECTION_STRING}}--connection "{{.CONNECTION_STRING}}"{{end}}
