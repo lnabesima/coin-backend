@@ -1,0 +1,37 @@
+version: '3'
+
+tasks:
+  default:
+    desc: List all available tasks
+    cmds:
+      - task --list
+    silent: true
+
+  build:
+    desc: Build the solution
+    cmds:
+      - dotnet build
+
+  run:
+    desc: Run the API project locally
+    cmds:
+      - dotnet run --project src/Coin.API
+
+  test:unit:
+    desc: Run all unit tests (Domain, Application, Infrastructure, API)
+    cmds:
+      - dotnet test --filter "FullyQualifiedName!~IntegrationTests"
+
+  test:e2e:
+    desc: Run E2E integration tests with Testcontainers
+    cmds:
+      - cmd: wsl bash -c "cd /mnt/c/Users/163813/www/Personal/coin-backend && dotnet test tests/Coin.IntegrationTests"
+        platforms: [windows]
+      - cmd: dotnet test tests/Coin.IntegrationTests
+        platforms: [linux]
+
+  test:
+    desc: Run the complete test suite (unit + E2E)
+    cmds:
+      - task: test:unit
+      - task: test:e2e
