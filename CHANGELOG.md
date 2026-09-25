@@ -22,4 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - RESTful `TransactionsController` exposing 5 CRUD endpoints under `/api/v1/transactions` (`POST`, `GET`, `GET {id}`, `PUT {id}`, `DELETE {id}`) with strict tenant isolation, date range filtering, and native RFC 7807 `ProblemDetails` error responses.
 - OpenAPI security scheme configuration for `X-Api-Key` enabling interactive authorized testing in Scalar UI (`/scalar/v1`).
 - Controller unit test suite in `tests/Coin.API.UnitTests/Controllers/TransactionsControllerTests.cs` bringing total test suite to 67 unit tests.
+- End-to-end integration test suite using `WebApplicationFactory<Program>` and `Testcontainers.PostgreSql` in `tests/Coin.IntegrationTests/Controllers/TransactionsControllerIntegrationTests.cs`, testing the complete transaction CRUD lifecycle, API Key authentication, and RFC 7807 ProblemDetails error handling against an isolated PostgreSQL instance.
+- Cross-platform task runner configuration via `Taskfile.yml` with tasks for building (`task build`), running API (`task run`), running unit tests (`task test:unit`), running E2E integration tests (`task test:e2e`), and executing the full test suite (`task test`).
+- Comprehensive `README.md` documentation covering prerequisites (.NET 10, Docker, Scoop/WinGet/Task), local startup, test execution guide, and architecture overview.
 
