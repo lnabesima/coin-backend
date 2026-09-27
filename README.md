@@ -74,6 +74,8 @@ task
 | `task test:unit` | Runs all unit tests (Domain, Application, Infrastructure, API) in seconds without requiring Docker |
 | `task test:e2e` | Runs end-to-end integration tests against an isolated containerized PostgreSQL database using Testcontainers |
 | `task test` | Runs the full test suite (unit tests followed by E2E tests) |
+| `task docker:build` | Builds production Docker image (`coin-api:latest`) |
+| `task docker:run` | Runs production Docker container locally on port 8080 |
 | `task build` | Compiles all projects in the solution |
 | `task run` | Runs the ASP.NET Core API project |
 
@@ -145,6 +147,15 @@ If you prefer not using the task runner:
   ```
 
 *(Note: On Windows machines where Docker runs inside WSL2 without Docker Desktop, run integration tests inside WSL or use `task test:e2e` which routes the command to the WSL Docker daemon).*
+
+## Cloud Deployment
+
+The application is containerized and designed for serverless container platforms such as Microsoft Azure Container Apps (ACA) or AWS ECS, paired with managed PostgreSQL (e.g. Neon).
+
+Key production characteristics:
+- Runs as a non-root unprivileged user (`USER $APP_UID`) on port `8080`.
+- Scalable to zero (`minReplicas = 0`) to eliminate idle compute costs.
+- Automated CI/CD pipeline via GitHub Actions that validates tests, runs database migrations, and publishes production images to GitHub Container Registry (`ghcr.io`).
 
 ## Project Architecture
 
