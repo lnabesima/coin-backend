@@ -28,4 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PostgreSQL connection resilience via Npgsql's native `EnableRetryOnFailure` (up to 3 retries with 5s exponential backoff) in `Coin.Infrastructure` to handle transient network disruptions and serverless database cold starts.
 - Database management tasks in `Taskfile.yml` (`task db:migrate` and `task db:status`) supporting local execution and cloud connection string overrides via `CONNECTION_STRING`.
 - Cloud-agnostic database configuration and migration guide in `README.md` covering TLS/SSL requirements, pooled vs direct connection strings, and resilience architecture.
+- Multi-stage production `Dockerfile` for .NET 10 using `mcr.microsoft.com/dotnet/aspnet:10.0-noble-chiseled` non-root runtime (`USER $APP_UID`) listening on port 8080.
+- Production `.dockerignore` configuration excluding local build artifacts, test projects, version control, and temporary files.
+- Docker management tasks in `Taskfile.yml` (`task docker:build` and `task docker:run`).
+- Automated CI/CD deployment workflow in `.github/workflows/deploy.yml` with test execution, EF Core database migration against Neon PostgreSQL, container build and push to GitHub Container Registry (`ghcr.io`), and revision rollout on Azure Container Apps in `brazilsouth`.
+- Cloud deployment overview and Docker tasks documentation in `README.md`.
 

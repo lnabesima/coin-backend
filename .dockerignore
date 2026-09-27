@@ -1,0 +1,27 @@
+# Version control and agent metadata
+**/.git
+**/.gitignore
+**/.github
+**/.agents
+**/openspec
+
+# Build outputs and intermediate files
+**/bin/
+**/obj/
+**/out/
+
+# Test projects (production image only contains API and its runtime dependencies)
+**/tests/
+**/*Tests/
+
+# IDE and tooling files
+**/.idea/
+**/.vs/
+**/.vscode/
+**/*.user
+**/*.suo
+
+# Local configuration and development overrides
+**/appsettings.Development.json
+docker-compose*.yml
+Taskfile.yml
