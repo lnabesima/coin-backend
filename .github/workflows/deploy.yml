@@ -13,7 +13,7 @@ permissions:
 env:
   REGISTRY: ghcr.io
   AZURE_CONTAINER_APP_NAME: coin-api
-  AZURE_RESOURCE_GROUP: rg-coin
+  AZURE_RESOURCE_GROUP: rg-coin-lnabesima
 
 jobs:
   test:
