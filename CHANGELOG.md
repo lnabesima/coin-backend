@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-28
+
 ### Added
 - Clean Architecture solution structure (.NET 10) with Domain, Application, Infrastructure, and API layers.
 - Native OpenAPI generation via `Microsoft.AspNetCore.OpenApi` (10.0.12).
