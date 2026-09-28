@@ -1,0 +1,63 @@
+version: '3'
+
+tasks:
+  default:
+    desc: List all available tasks
+    cmds:
+      - task --list
+    silent: true
+
+  build:
+    desc: Build the solution
+    cmds:
+      - dotnet build
+
+  run:
+    desc: Run the API project locally
+    cmds:
+      - dotnet run --project src/Coin.API
+
+  test:unit:
+    desc: Run all unit tests (Domain, Application, Infrastructure, API)
+    cmds:
+      - dotnet test --filter "FullyQualifiedName!~IntegrationTests"
+
+  test:e2e:
+    desc: Run E2E integration tests with Testcontainers
+    cmds:
+      - cmd: wsl dotnet test tests/Coin.IntegrationTests
+        platforms: [windows]
+      - cmd: dotnet test tests/Coin.IntegrationTests
+        platforms: [linux]
+
+  test:
+    desc: Run the complete test suite (unit + E2E)
+    cmds:
+      - task: test:unit
+      - task: test:e2e
+
+  db:migrate:
+    desc: Apply pending EF Core database migrations (optionally override via CONNECTION_STRING="...")
+    cmds:
+      - cmd: dotnet ef database update --project src/Coin.Infrastructure --startup-project src/Coin.API {{if .CONNECTION_STRING}}--connection "{{.CONNECTION_STRING}}"{{end}}
+
+  db:status:
+    desc: Check EF Core migration status (applied and pending migrations)
+    cmds:
+      - cmd: dotnet ef migrations list --project src/Coin.Infrastructure --startup-project src/Coin.API {{if .CONNECTION_STRING}}--connection "{{.CONNECTION_STRING}}"{{end}}
+
+  docker:build:
+    desc: Build production Docker image
+    cmds:
+      - cmd: wsl docker build -t coin-api:latest .
+        platforms: [windows]
+      - cmd: docker build -t coin-api:latest .
+        platforms: [linux]
+
+  docker:run:
+    desc: Run production Docker image locally on port 8080
+    cmds:
+      - cmd: wsl docker run --rm -p 8080:8080 coin-api:latest
+        platforms: [windows]
+      - cmd: docker run --rm -p 8080:8080 coin-api:latest
+        platforms: [linux]
