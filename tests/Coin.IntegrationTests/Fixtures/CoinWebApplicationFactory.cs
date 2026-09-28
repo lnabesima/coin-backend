@@ -3,6 +3,7 @@ namespace Coin.IntegrationTests.Fixtures;
 using Coin.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,14 +33,24 @@ public sealed class CoinWebApplicationFactory : WebApplicationFactory<Program>, 
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureAppConfiguration((_, config) =>
+        builder.UseSetting("ConnectionStrings:DefaultConnection", _dbContainer.GetConnectionString());
+        builder.UseSetting("Authentication:ApiKey", ValidApiKey);
+        builder.UseSetting("Authentication:DefaultUserId", DefaultUserId.ToString());
+
+        builder.ConfigureTestServices(services =>
         {
-            config.AddInMemoryCollection(new Dictionary<string, string?>
+            var descriptor = services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<CoinDbContext>));
+            if (descriptor != null)
             {
-                ["ConnectionStrings:DefaultConnection"] = _dbContainer.GetConnectionString(),
-                ["Authentication:ApiKey"] = ValidApiKey,
-                ["Authentication:DefaultUserId"] = DefaultUserId.ToString()
-            });
+                services.Remove(descriptor);
+            }
+
+            services.AddDbContext<CoinDbContext>(options =>
+                options.UseNpgsql(_dbContainer.GetConnectionString(), npgsqlOptions =>
+                    npgsqlOptions.EnableRetryOnFailure(
+                        maxRetryCount: 3,
+                        maxRetryDelay: TimeSpan.FromSeconds(5),
+                        errorCodesToAdd: null)));
         });
     }
 
