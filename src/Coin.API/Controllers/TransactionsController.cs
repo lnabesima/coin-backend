@@ -3,9 +3,11 @@ namespace Coin.API.Controllers;
 using Coin.API.Extensions;
 using Coin.Application.DTOs.Transactions;
 using Coin.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize]
 [ApiController]
 [Route("api/v1/[controller]")]
 public class TransactionsController(ITransactionService transactionService) : ControllerBase
