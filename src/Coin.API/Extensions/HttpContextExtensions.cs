@@ -1,6 +1,7 @@
-namespace Coin.API.Extensions;
-
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+
+namespace Coin.API.Extensions;
 
 public static class HttpContextExtensions
 {
@@ -9,6 +10,12 @@ public static class HttpContextExtensions
     public static Guid GetUserId(this HttpContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
+
+        if (context.User.FindFirst(ClaimTypes.NameIdentifier) is { } claim &&
+            Guid.TryParse(claim.Value, out Guid claimUserId))
+        {
+            return claimUserId;
+        }
 
         if (context.Items.TryGetValue(UserIdItemKey, out var item) && item is Guid userId)
         {
@@ -21,6 +28,12 @@ public static class HttpContextExtensions
     public static Guid? TryGetUserId(this HttpContext context)
     {
         ArgumentNullException.ThrowIfNull(context);
+
+        if (context.User.FindFirst(ClaimTypes.NameIdentifier) is { } claim &&
+            Guid.TryParse(claim.Value, out Guid claimUserId))
+        {
+            return claimUserId;
+        }
 
         if (context.Items.TryGetValue(UserIdItemKey, out var item) && item is Guid userId)
         {
