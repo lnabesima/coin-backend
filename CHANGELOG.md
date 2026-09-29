@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-29
+
+### Added
+- Native ASP.NET Core `ApiKeyAuthenticationHandler` deriving from `AuthenticationHandler<ApiKeyAuthenticationOptions>` validating `X-Api-Key` headers via constant-time comparison.
+- Cross-Origin Resource Sharing (CORS) extension method (`AddCorsPolicy`) and configuration options (`CorsOptions`) registering `FrontendPolicy` with support for Azure Static Web Apps origins (`*.azurestaticapps.net`) and localhost with automated preflight `OPTIONS` resolution.
+- Public unauthenticated `/health` endpoint for Azure Container Apps liveness, readiness, and startup probes.
+- End-to-end integration test suite for security, CORS preflight negotiation, and public health checks (`CorsAndHealthCheckIntegrationTests`).
+- Unit test suite for `ApiKeyAuthenticationHandler` covering valid, invalid, empty, and missing API keys as well as RFC 7807 ProblemDetails challenge responses.
+
+### Changed
+- Migrated authentication and authorization to standard ASP.NET Core pipeline (`app.UseAuthentication()`, `app.UseAuthorization()`) and secured `TransactionsController` with declarative `[Authorize]` attribute.
+- Updated `HttpContextExtensions` to extract tenant identity from `ClaimsPrincipal` (`ClaimTypes.NameIdentifier`) with backward-compatible fallback to `HttpContext.Items["UserId"]`.
+
+### Removed
+- Deprecated custom `ApiKeyMiddleware` and its corresponding unit tests (`ApiKeyMiddlewareTests`).
+
 ## [0.1.0] - 2026-09-28
 
 ### Added
